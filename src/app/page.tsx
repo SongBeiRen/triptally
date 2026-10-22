@@ -1,69 +1,116 @@
-import Image from "next/image";
+import Link from "next/link";
+import CreateTripForm from "@/components/CreateTripForm";
 
-export default function Home() {
+// The demo trip is auto-seeded on server boot (see src/instrumentation.ts).
+// The CTA is unconditional so the landing page stays fully static; if the demo
+// is ever missing, /join/DEMO24 degrades to a friendly "link doesn't work" page.
+const hasDemo = true;
+
+const pains = [
+  { emoji: "💬", title: "127 unread messages", text: "Dates, links and that one restaurant idea — spread across three chats and a spreadsheet nobody opens." },
+  { emoji: "🙈", title: "Nobody vetoes out loud", text: "People skip the poll rather than be the friend who voted against the beach house." },
+  { emoji: "🌀", title: "The plan dies in scroll-back", text: "The trip everyone wanted gets lost between memes and flight screenshots." },
+];
+
+const steps = [
+  { emoji: "✍️", title: "Start a trip", text: "Drop in a couple of destination ideas, date windows and the vibe. Takes a minute." },
+  { emoji: "🔗", title: "Share one link", text: "Friends join from their phone — no app, no account, no excuses." },
+  { emoji: "🗳️", title: "Vote it out", text: "Everyone marks dates and votes on places, anonymously if the organizer chooses. The tally decides, not the loudest friend." },
+  { emoji: "🗺️", title: "Get the plan", text: "A day-by-day itinerary built from what the group actually voted for." },
+];
+
+export default async function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="min-h-dvh">
+      <header className="max-w-6xl mx-auto px-5 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
+          <span aria-hidden>🧭</span> TripTally
+        </div>
+        <nav className="flex items-center gap-3 text-sm font-medium">
+          <a href="#how" className="hidden sm:inline text-ink-soft hover:text-ink transition-colors">
+            How it works
+          </a>
+          {hasDemo && (
+            <Link href="/join/DEMO24" className="btn btn-ghost px-4 py-2 text-sm">
+              Open live demo
+            </Link>
+          )}
+        </nav>
+      </header>
+
+      <main>
+        <section className="max-w-6xl mx-auto px-5 pt-10 pb-16 sm:pt-20 text-center">
+          <div className="chip !cursor-default mb-6 mx-auto w-fit">
+            <span className="w-2 h-2 rounded-full bg-teal pulse-soft" /> group trips, minus the group chat
+          </div>
+          <h1 className="font-display text-4xl sm:text-6xl leading-[1.08] font-semibold max-w-3xl mx-auto tracking-tight">
+            Agree on the trip<span className="text-coral">.</span>
+            <br className="hidden sm:block" /> Not on 200 messages.
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-6 text-lg text-ink-soft max-w-xl mx-auto leading-relaxed">
+            TripTally gives your crew one link to vote on dates, destinations and places —
+            then turns the winning picks into a day-by-day plan.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a href="#create" className="btn btn-primary px-7 py-3.5 text-base">
+              Start a trip — it&apos;s free
+            </a>
+            {hasDemo ? (
+              <Link href="/join/DEMO24" className="btn btn-ghost px-7 py-3.5 text-base">
+                Peek at a live trip →
+              </Link>
+            ) : (
+              <span className="btn btn-ghost px-7 py-3.5 text-base !cursor-default">Peek at a live trip →</span>
+            )}
+          </div>
+          <p className="mt-4 text-sm text-ink-soft">No accounts. No installs. Your friends just tap a link.</p>
+        </section>
+
+        <section className="max-w-6xl mx-auto px-5 pb-16">
+          <div className="grid sm:grid-cols-3 gap-4">
+            {pains.map((p) => (
+              <div key={p.title} className="card p-6 text-left">
+                <div className="text-2xl" aria-hidden>{p.emoji}</div>
+                <h3 className="mt-3 font-semibold">{p.title}</h3>
+                <p className="mt-1.5 text-sm text-ink-soft leading-relaxed">{p.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="how" className="max-w-6xl mx-auto px-5 pb-20">
+          <h2 className="font-display text-3xl font-semibold text-center tracking-tight">How it works</h2>
+          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {steps.map((s, i) => (
+              <div key={s.title} className="card p-6 relative">
+                <span className="absolute top-5 right-6 font-display text-3xl text-line select-none" aria-hidden>
+                  {i + 1}
+                </span>
+                <div className="text-2xl" aria-hidden>{s.emoji}</div>
+                <h3 className="mt-3 font-semibold">{s.title}</h3>
+                <p className="mt-1.5 text-sm text-ink-soft leading-relaxed">{s.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="create" className="max-w-3xl mx-auto px-5 pb-24">
+          <h2 className="font-display text-3xl font-semibold text-center tracking-tight">Create your trip</h2>
+          <p className="text-center text-ink-soft mt-2 text-sm">
+            You&apos;ll get a single link to drop in the group chat. That&apos;s the whole onboarding.
+          </p>
+          <div className="mt-8">
+            <CreateTripForm />
+          </div>
+        </section>
       </main>
+
+      <footer className="border-t border-line py-8 text-center text-sm text-ink-soft">
+        <div className="font-display text-base text-ink mb-1">
+          <span aria-hidden>🧭</span> TripTally
+        </div>
+        Plan together, not over group chat. A portfolio project — built with Next.js, SQLite and a deterministic fallback brain.
+      </footer>
     </div>
   );
 }
